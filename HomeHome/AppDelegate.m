@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AppConstants.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    [application registerUserNotificationSettings:settings];
+    
     return YES;
 }
 
@@ -42,6 +47,35 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     // Saves changes in the application's managed object context before the application terminates.
     [self saveContext];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    if (notificationSettings.types != UIUserNotificationTypeNone) {
+        [application registerForRemoteNotifications];
+    } else {
+        BOOL remoteNoteAllow = NO;
+        [[NSUserDefaults standardUserDefaults] setBool:remoteNoteAllow forKey:myRemoteNoteAllow];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSString *dToken = [deviceToken description];
+    dToken = [dToken stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    dToken = [dToken stringByReplacingOccurrencesOfString:@">" withString:@""];
+    dToken = [dToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [[NSUserDefaults standardUserDefaults] setObject:dToken forKey:myDeviceToken];
+    BOOL remoteNoteAllow = YES;
+    [[NSUserDefaults standardUserDefaults] setBool:remoteNoteAllow forKey:myRemoteNoteAllow];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"Error in remote notification %@, %@", error, [error userInfo]);
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    NSLog(@"Just received remote notification");
 }
 
 #pragma mark - Core Data stack
@@ -119,9 +153,46 @@
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+         //   abort();
         }
     }
+}
+
+#pragma Network operation
+
++ (void)netWorkJob:(NSURL *)url httpMethod:(NSString *)verb withAuth:(NSString *)authStr withData:(NSData *)sendData withCompletionHandler:(void (^)(NSData *))handler {
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    //   NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setHTTPMethod:verb];
+    if (sendData != nil) {
+        [request setHTTPBody:sendData];
+    }
+    if (authStr != nil) {
+        [request setValue:authStr forHTTPHeaderField:@"Authorization"];
+    }
+    NSURLSessionDataTask *postTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (error != nil) {
+            NSLog(@"AppDelegate -- %@", [error localizedDescription]);
+        } else {
+            NSInteger statusCode = [(NSHTTPURLResponse *)response statusCode];
+            if (statusCode != 200) {
+                NSLog(@"HTTP status code = %ld", (long)statusCode);
+            }
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                handler(data);
+                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            }];
+        }
+    }];
+    [postTask resume];
+    
 }
 
 @end

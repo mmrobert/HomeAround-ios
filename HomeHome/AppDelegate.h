@@ -20,6 +20,7 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 
++ (void)netWorkJob: (NSURL *)url httpMethod:(NSString *)verb withAuth:(NSString *)authStr withData:(NSData *)sendData withCompletionHandler:(void(^)(NSData *data))handler;
 
 @end
 

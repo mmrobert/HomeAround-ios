@@ -1,4 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="Test1.xcdatamodel" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <elements/>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Automatic">
+    <entity name="MerJobEntity" syncable="YES">
+        <attribute name="distance" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobDetail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeFinish" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timePosted" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MerMsgBoxEntity" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastMsg" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeLastMsg" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MsgBoxEntity" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastMsg" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeLastMsg" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MsgEntity" syncable="YES">
+        <attribute name="direction" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgBody" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msgTime" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MyJobEntity" syncable="YES">
+        <attribute name="jobCat" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobCost" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="jobDetail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="jobTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeCreated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timeToFinish" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MyServiceEntity" syncable="YES">
+        <attribute name="cat" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="detail" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MerJobEntity" positionX="-45" positionY="72" width="128" height="165"/>
+        <element name="MerMsgBoxEntity" positionX="-54" positionY="63" width="128" height="105"/>
+        <element name="MsgBoxEntity" positionX="-63" positionY="54" width="128" height="105"/>
+        <element name="MsgEntity" positionX="-54" positionY="63" width="128" height="120"/>
+        <element name="MyJobEntity" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="MyServiceEntity" positionX="-63" positionY="36" width="128" height="120"/>
+    </elements>
 </model>
